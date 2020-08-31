@@ -38,17 +38,20 @@ document.addEventListener("DOMContentLoaded", ()=>{
         const ul = trainerDiv.querySelector('ul')
         
         for(const pokemon of trainer.pokemons){
-            const li = document.createElement('li')
-            li.innerHTML = `
-                ${pokemon.nickname} (${pokemon.species})
-                <button class="release" data-pokemon-id="${pokemon.id}">Release</button>
-            `
-            ul.append(li)
+            renderPokemon(pokemon)
         }
     }
 
-    const addPokemon = () => {
-
+    const renderPokemon = (pokemon) => {
+        const trainerDiv = document.querySelector(`[data-id="${pokemon.trainer_id}"]`)
+        const ul = trainerDiv.querySelector('ul')
+        const li = document.createElement('li')
+        
+        li.innerHTML = `
+                ${pokemon.nickname} (${pokemon.species})
+                <button class="release" data-pokemon-id="${pokemon.id}">Release</button>
+            `
+        ul.append(li)
     }
 
     document.addEventListener("click", (e)=>{
@@ -74,13 +77,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
             fetch(POKEMONS_URL, options)
                 .then(response => response.json())
-                .then(pokemon => {
-                    li.innerHTML = `
-                        ${pokemon.nickname} (${pokemon.species})
-                        <button class="release" data-pokemon-id="${pokemon.id}">Release</button>
-                    `
-                    ul.append(li)
-                })
+                .then(renderPokemon)
 
         } else if(e.target.matches('.release')){
             const button = e.target
